@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · Webui-XL{% endblock %}
+{% block content %}
+<div class="max-w-5xl mx-auto">
+  <div class="neu-box p-4 md:p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold">📦 Data Shared</h2>
+      <span class="text-xs text-slate-400">login as: <b>{{ me }}</b></span>
+    </div>
+
+    {% if msg %}<div class="alert-success mb-4">✅ {{ msg }}</div>{% endif %}
+
+    <p class="text-xs text-slate-400 mb-4">File di sini dipakai <b>semua member</b>: Hot (<code>hot.json</code>), Hot-2 (<code>hot2.json</code>), dll. Edit → Simpan, langsung keliatan di halaman member.</p>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+      {% for f in files %}
+      <a href="/admin/data?key={{ f | urlencode }}" class="text-xs px-3 py-1.5 rounded-full {% if f == selected %}bg-indigo-500 text-white{% else %}neu-box-sm text-slate-300{% endif %} font-mono">{{ f }}</a>
+      {% endfor %}
+      {% if not files %}<span class="text-xs text-slate-500">Belum ada file shared.</span>{% endif %}
+    </div>
+
+    {% if selected %}
+    <form method="post" action="/admin/data/save">
+      <input type="hidden" name="key" value="{{ selected }}">
+      <textarea name="content" rows="22" class="form-input font-mono text-xs w-full" spellcheck="false">{{ content }}</textarea>
+      <div class="flex items-center gap-2 mt-3">
+        <button class="btn btn-primary text-sm" data-confirm-title="Simpan perubahan {{ selected }}?" data-confirm-detail="Langsung dipakai semua member." data-confirm-ok="Simpan">💾 Simpan {{ selected }}</button>
+        {% if is_json %}<span class="text-xs text-emerald-400">JSON valid ✓</span>{% else %}<span class="text-xs text-amber-400">bukan JSON (tetap bisa disimpan)</span>{% endif %}
+        {% if selected == 'shared/hot.json' or selected == 'shared/hot2.json' %}<span class="text-xs text-slate-500">→ tampil di /hot & /hot2</span>{% endif %}
+      </div>
+    </form>
+    <form method="post" action="/admin/data/delete" class="mt-3" data-confirm-title="Hapus {{ selected }}?" data-confirm-detail="File shared hilang permanen." data-confirm-variant="danger">
+      <input type="hidden" name="key" value="{{ selected }}">
+      <button class="text-xs text-red-400 hover:underline">🗑 Hapus file ini</button>
+    </form>
+    {% endif %}
+
+    <div class="mt-6 pt-4 border-t border-slate-800">
+      <h3 class="text-sm font-semibold mb-2">➕ File baru</h3>
+      <form method="post" action="/admin/data/new" class="flex gap-2 items-center">
+        <input class="form-input text-sm font-mono max-w-xs" name="name" placeholder="pulsa-decoy.json" required>
+        <button class="btn btn-secondary text-sm whitespace-nowrap">Buat</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

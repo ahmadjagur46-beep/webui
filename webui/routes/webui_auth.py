@@ -38,11 +38,33 @@ def login_submit(request: Request, username: str = Form(...), password: str = Fo
                  next: str = Form("/")):
     u = authenticate(username, password)
     if not u:
+        from webui import admin as admin_mod
+        ip = getattr(request.state, "client_ip", "-")
+        admin_mod.record_login_fail(username, ip)
+        admin_mod.log_event("login_fail", username, ip, "wrong credentials")
         return _render(request, "webui_login.html",
                        mode="login",
                        error="Username atau password salah.",
                        username=username, next=next,
                        users_count=len(load_users()))
+    from webui import admin as admin_mod
+    ip = getattr(request.state, "client_ip", "-")
+    if admin_mod.is_banned(u["username"]):
+        admin_mod.log_event("login_fail", u["username"], ip, "banned account")
+        return _render(request, "webui_login.html",
+                       mode="login",
+                       error="Akun lu kena BAN. Hubungi admin.",
+                       username=username, next=next,
+                       users_count=len(load_users()))
+    ok_lock, lock_msg = admin_mod.check_login_lock(username, ip)
+    if not ok_lock:
+        admin_mod.log_event("login_fail", username, ip, "rate limited")
+        return _render(request, "webui_login.html",
+                       mode="login", error=lock_msg,
+                       username=username, next=next,
+                       users_count=len(load_users()))
+    admin_mod.record_login_ok(username, ip)
+    admin_mod.log_event("login_ok", u["username"], ip, "login success")
     token = make_session_token(u["username"])
     resp = RedirectResponse(url=next or "/", status_code=303)
     resp.set_cookie(

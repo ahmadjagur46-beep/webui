@@ -32,12 +32,14 @@ def render(request: Request, template: str, **context):
     templates = get_templates(request)
     webui_user = getattr(request.state, "webui_user", None)
     user_theme = (webui_user or {}).get("theme", "dark") if webui_user else "dark"
+    from webui.admin import is_admin
     base_ctx = {
         "request": request,
         "active_user": get_active_user_safe(),
         "accounts": list_accounts(),
         "webui_user": webui_user,
         "user_theme": user_theme,
+        "is_webui_admin": is_admin((webui_user or {}).get("username")),
     }
     base_ctx.update(context)
     return templates.TemplateResponse(request, template, base_ctx)
