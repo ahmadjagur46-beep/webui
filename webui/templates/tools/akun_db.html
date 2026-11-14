@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">🗄️ Database Akun</h2>
+  <p class="text-xs text-slate-400 mb-4">Daftar akun yang tersimpan di sistem.</p>
+
+  {% if accounts %}
+  <div class="neu-box p-4 overflow-auto">
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap">{{ accounts | tojson(indent=2) }}</pre>
+  </div>
+  {% else %}
+  <p class="text-slate-500 text-sm">Belum ada akun tersimpan.</p>
+  {% endif %}
+</div>
+{% endblock %}
