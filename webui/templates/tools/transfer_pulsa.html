@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">💳 Transfer Pulsa</h2>
+  <p class="text-xs text-slate-400 mb-4">Kirim saldo pulsa antar nomor MSISDN.</p>
+
+  <form method="POST" class="grid gap-3 mb-4">
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Nomor Tujuan (MSISDN)</label>
+      <input type="text" name="destination_msisdn" value="{{ destination_msisdn or '' }}" placeholder="628xxxxxxxxxx" required class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Nominal Transfer (Rp)</label>
+      <input type="text" name="amount" value="{{ amount or '' }}" placeholder="10000" required class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <button type="submit" class="btn btn-primary text-sm" data-confirm="Yakin mau transfer pulsa? Saldo akan langsung terpotong." data-confirm-ok="Transfer">💸 Kirim Pulsa</button>
+  </form>
+
+  {% if output %}
+  <div class="neu-box p-4">
+    <h3 class="text-sm font-bold mb-2">📋 Hasil Transfer</h3>
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[500px]">{{ output }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

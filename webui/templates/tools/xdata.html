@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="max-w-3xl mx-auto">
+  <div class="neu-box p-4 md:p-6">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-xl font-bold">🔐 Decrypt Xdata</h2>
+    </div>
+    <p class="text-xs text-slate-400 mb-4">Tempel <code>xdata</code> + <code>xtime</code> dari response API. Hasil: JSON kebaca.</p>
+    <form method="POST" class="grid gap-3 mb-4">
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">xtime</label>
+        <input type="text" name="xtime" value="{{ xtime or '' }}" placeholder="1792071653" class="w-full neu-input text-sm font-mono" style="padding:10px 14px;" required>
+      </div>
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">xdata</label>
+        <textarea name="xdata" class="w-full neu-input text-sm font-mono" style="min-height: 140px; padding:10px 14px;" placeholder="VfLJm2SsEMJp..." required>{{ xdata or '' }}</textarea>
+      </div>
+      <button type="submit" class="btn btn-primary text-sm">🔓 Decrypt</button>
+    </form>
+
+    {% if output %}
+    <div class="neu-box p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold">Hasil</h3>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('xout').textContent)" class="text-xs text-slate-400 hover:text-white">📋 Copy</button>
+      </div>
+      <pre id="xout" class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[500px]">{{ output }}</pre>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">🌐 Circle Net</h2>
+  <p class="text-xs text-slate-400 mb-4">Informasi jaringan komunitas dan circle terkait.</p>
+
+  {% if output %}
+  <div class="neu-box p-4">
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[600px]">{{ output }}</pre>
+  </div>
+  {% else %}
+  <p class="text-slate-500 text-sm">Data tidak tersedia.</p>
+  {% endif %}
+</div>
+{% endblock %}

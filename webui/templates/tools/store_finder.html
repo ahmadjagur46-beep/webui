@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">📍 Cari Toko</h2>
+  <p class="text-xs text-slate-400 mb-4">Pencarian outlet/toko terdekat dari lokasi Anda.</p>
+
+  <form method="POST" class="grid gap-3 mb-4">
+    <div class="grid grid-cols-2 gap-2">
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">Latitude</label>
+        <input type="text" name="lat" placeholder="-6.2088" class="w-full neu-input text-sm" style="padding:10px 14px;">
+      </div>
+      <div>
+        <label class="text-xs text-slate-400 mb-1 block">Longitude</label>
+        <input type="text" name="lon" placeholder="106.8456" class="w-full neu-input text-sm" style="padding:10px 14px;">
+      </div>
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Radius (meter)</label>
+      <input type="number" name="radius" value="5000" class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <button type="submit" class="btn btn-primary text-sm">🔍 Cari Toko</button>
+  </form>
+
+  {% if output %}
+  <div class="neu-box p-4">
+    <h3 class="text-sm font-bold mb-2">📋 Hasil</h3>
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[500px]">{{ output }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
