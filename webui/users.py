@@ -261,10 +261,13 @@ def get_user_by_telegram(chat_id: int) -> dict | None:
 
 
 def make_session_token(username: str) -> str:
-    return _serializer().dumps({"u": username.lower()})
+    from webui import admin as admin_mod
+    return _serializer().dumps({"u": username.lower(), "e": admin_mod.get_epoch(username.lower())})
 
 
-def parse_session_token(token: str) -> Optional[str]:
+def parse_session_token(token: str | None) -> Optional[str]:
+    if not token:
+        return None
     try:
         data = _serializer().loads(token, max_age=SESSION_MAX_AGE)
     except (BadSignature, SignatureExpired):
@@ -272,5 +275,13 @@ def parse_session_token(token: str) -> Optional[str]:
     except Exception:
         return None
     if isinstance(data, dict):
-        return data.get("u")
+        # kick enforcement: token epoch older than user's current epoch => invalid
+        from webui import admin as admin_mod
+        uname = data.get("u")
+        try:
+            if float(data.get("e", 0)) < admin_mod.get_epoch(uname):
+                return None
+        except Exception:
+            return None
+        return uname
     return None

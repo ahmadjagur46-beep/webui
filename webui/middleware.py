@@ -15,6 +15,8 @@ from webui.storage.tenant import (
     current_storage_username,
     ensure_user_bootstrap,
 )
+from webui import admin as admin_mod
+from webui.users import make_session_token, COOKIE_NAME as _COOKIE_NAME
 
 PUBLIC_PATHS = (
     "/u/login",
@@ -37,6 +39,28 @@ class WebUIAuthMiddleware(BaseHTTPMiddleware):
         token = request.cookies.get(COOKIE_NAME)
         username = parse_session_token(token) if token else None
         user = get_user(username) if username else None
+
+        # remember IP for login logging / admin views
+        fwd = request.headers.get("x-forwarded-for", "")
+        request.state.client_ip = fwd.split(",")[0].strip() if fwd else (request.client.host if request.client else "-")
+
+        if user and admin_mod.is_banned(user["username"]):
+            resp = RedirectResponse(url="/u/login?error=Banned.+Hubungi+admin.", status_code=303)
+            resp.delete_cookie(key=COOKIE_NAME)
+            return resp
+
+        if user and admin_mod.is_admin(user["username"]):
+            # admins: check kick epoch embedded in their cookie
+            try:
+                from webui.users import _serializer
+                data = _serializer().loads(token, max_age=60*60*24*30)
+                tok_epoch = float(data.get("e", 0))
+                if tok_epoch < admin_mod.get_epoch(user["username"]):
+                    # re-issue fresh token for admin (kick only affects members)
+                    new_token = make_session_token(user["username"])
+                    request.state._reissue_cookie = new_token
+            except Exception:
+                pass
 
         if not user:
             if is_public:
