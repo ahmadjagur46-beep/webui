@@ -69,12 +69,14 @@ vars = { ENVIRONMENT = "production" }
 [[env.production.d1_databases]]
 binding = "DB"
 database_name = "webui-xl"
-database_id = "b16350cf-1dc8-48ff-8a53-affb7346d7d6"
+database_id = "c66e9d1f-3267-40f8-924b-e10f54049151"
 migrations_dir = "migrations"
 
-[[env.production.r2_buckets]]
-binding = "DATA"
-bucket_name = "webui-xl-data"
+# R2 dinonaktifkan (butuh aktivasi billing di dashboard). Backend jatuh ke D1
+# storage_meta otomatis kalau binding DATA tidak ada — lihat d1r2-backend.ts.
+# [[env.production.r2_buckets]]
+# binding = "DATA"
+# bucket_name = "webui-xl-data"
 
 # [[env.production.queues.producers]]
 # binding = "PURCHASE_QUEUE"
