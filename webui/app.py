@@ -157,6 +157,8 @@ def create_app() -> FastAPI:
     from webui.routes import monitoring as r_monitoring
     from webui.routes import theme as r_theme
     from webui.routes import donasi as r_donasi
+    from webui.routes import tools as r_tools
+    from webui.routes import admin as r_admin
 
     app.include_router(r_webui_auth.router)
     app.include_router(r_dashboard.router)
@@ -175,6 +177,8 @@ def create_app() -> FastAPI:
     app.include_router(r_monitoring.router)
     app.include_router(r_theme.router)
     app.include_router(r_donasi.router)
+    app.include_router(r_tools.router)
+    app.include_router(r_admin.router)
 
     @app.exception_handler(404)
     async def not_found(request: Request, exc):
