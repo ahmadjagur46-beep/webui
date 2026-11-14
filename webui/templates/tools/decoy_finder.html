@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">🔎 Real Decoy Finder</h2>
+  <p class="text-xs text-slate-400 mb-4">Cari option/family code asli dari API dan simpan sebagai decoy aktif.</p>
+
+  <form method="POST" class="mb-4 grid gap-3">
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Option Code (opsional)</label>
+      <input type="text" name="option_code" value="{{ option_code or '' }}" placeholder="Contoh: XL-PKS-XXXX" class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Family Code (opsional)</label>
+      <input type="text" name="family_code" value="{{ family_code or '' }}" placeholder="Contoh: FAM-XXXX" class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <button type="submit" name="action" value="search" class="btn btn-primary text-sm">🚀 Cari & Validasi</button>
+  </form>
+
+  {% if output %}
+  <div class="mt-4">{{ output | safe }}</div>
+  {% else %}
+  <p class="text-slate-500 text-sm">Hasil akan muncul di sini...</p>
+  {% endif %}
+</div>
+{% endblock %}

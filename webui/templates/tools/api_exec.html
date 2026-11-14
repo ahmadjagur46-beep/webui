@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold">🖥️ Custom API Execution</h2>
+  </div>
+
+  <form method="POST" class="grid gap-3 mb-4">
+    <div class="flex gap-2">
+      <select name="api_method" class="neu-input text-sm" style="width: 120px; padding: 10px 12px;">
+        <option value="POST" {% if form_data.api_method == 'POST' %}selected{% endif %}>POST</option>
+        <option value="GET" {% if form_data.api_method == 'GET' %}selected{% endif %}>GET</option>
+      </select>
+      <input type="text" name="api_path" value="{{ form_data.api_path or 'api/v8/packages/quota-details' }}" placeholder="api/v8/..." required class="flex-1 neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">JSON Payload</label>
+      <textarea name="api_payload" class="w-full neu-input text-sm font-mono" style="min-height: 160px; padding:10px 14px;" placeholder='{"key": "value"}'>{{ form_data.api_payload or '{\n  "is_enterprise": false,\n  "lang": "id",\n  "family_member_id": ""\n}' }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary text-sm">🚀 Eksekusi API</button>
+  </form>
+
+  {% if response_text %}
+  <div class="neu-box p-4">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-semibold">Response</h3>
+    </div>
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[500px]">{{ response_text }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

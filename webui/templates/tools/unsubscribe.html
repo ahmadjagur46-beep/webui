@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">🚫 Unsubscribe Layanan</h2>
+  <p class="text-xs text-slate-400 mb-4">Batalkan langganan paket / layanan aktif.</p>
+
+  <form method="POST" class="grid gap-3 mb-4">
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Product Domain</label>
+      <input type="text" name="product_domain" value="{{ product_domain or '' }}" placeholder="Contoh: DATA" required class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Quota Code</label>
+      <input type="text" name="quota_code" value="{{ quota_code or '' }}" placeholder="Contoh: quota_code dari paket" required class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <div>
+      <label class="text-xs text-slate-400 mb-1 block">Subscription Type</label>
+      <input type="text" name="product_subscription_type" value="{{ product_subscription_type or '' }}" placeholder="Contoh: PREPAID" required class="w-full neu-input text-sm" style="padding:10px 14px;">
+    </div>
+    <button type="submit" class="btn btn-primary text-sm" data-confirm="Yakin mau unsubscribe layanan ini?" data-confirm-ok="Unsubscribe" data-confirm-variant="danger">🚫 Unsubscribe</button>
+  </form>
+
+  {% if output %}
+  <div class="neu-box p-4">
+    <pre class="text-xs text-emerald-300 whitespace-pre-wrap overflow-auto max-h-[500px]">{{ output }}</pre>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

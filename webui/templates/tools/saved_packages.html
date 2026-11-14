@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <h2 class="text-xl font-bold mb-2">⭐ Saved Packages</h2>
+  <p class="text-xs text-slate-400 mb-4">Paket-paket yang Anda simpan untuk dibeli nanti.</p>
+
+  <form method="POST" class="grid gap-2 mb-4 p-3 neu-box-sm">
+    <input type="hidden" name="action" value="add">
+    <div class="flex gap-2">
+      <input type="text" name="option_code" placeholder="Option Code (opsional)" class="flex-1 neu-input text-sm" style="padding:8px 12px;">
+      <input type="text" name="family_code" placeholder="Family Code (opsional)" class="flex-1 neu-input text-sm" style="padding:8px 12px;">
+    </div>
+    <input type="text" name="custom_name" placeholder="Nama custom (opsional)" class="w-full neu-input text-sm" style="padding:8px 12px;">
+    <button type="submit" class="btn btn-primary text-xs">➕ Simpan Paket</button>
+  </form>
+
+  {% if saved %}
+  <div class="grid gap-2">
+    {% for key, val in saved.items() %}
+    <div class="neu-box-sm p-3 flex items-center justify-between">
+      <div>
+        <p class="text-sm font-semibold">{{ val.get('custom_name') or key }}</p>
+        <p class="text-xs text-slate-400">Option: {{ val.get('option_code') or '-' }} | Family: {{ val.get('family_code') or '-' }}</p>
+      </div>
+      <div class="flex gap-2">
+        <a href="/packages/by-option?code={{ val.get('option_code') }}" class="btn btn-secondary text-xs">Beli</a>
+        <form method="POST">
+          <input type="hidden" name="action" value="delete">
+          <input type="hidden" name="option_code" value="{{ key }}">
+          <button type="submit" class="btn btn-secondary text-xs !text-red-400" data-confirm="Hapus paket ini dari daftar?" data-confirm-ok="Hapus" data-confirm-variant="danger">🗑️</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-slate-500 text-sm">Belum ada paket yang disimpan.</p>
+  {% endif %}
+</div>
+{% endblock %}

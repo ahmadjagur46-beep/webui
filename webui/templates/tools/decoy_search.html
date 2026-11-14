@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="neu-box p-4 md:p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-bold">🛡️ Decoy Search</h2>
+  </div>
+
+  <form method="POST" class="mb-6 flex gap-2">
+    <input type="text" name="query" value="{{ query or '' }}" placeholder="Cari nama decoy, key, family code, variant code..." class="flex-1 neu-input text-sm" style="padding:10px 14px;">
+    <button type="submit" class="btn btn-primary text-sm">🔍 Cari</button>
+  </form>
+
+  {% if results is defined %}
+    {% if results %}
+      <div class="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+        {% for d in results %}
+        <div class="neu-box p-4 border-l-4 border-emerald-500">
+          <div class="flex items-center justify-between mb-2">
+            <h4 class="font-semibold text-sm">{{ d.get('option_name', d.get('family_name', d.key)) }}</h4>
+            <span class="px-2 py-0.5 text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 rounded">Aktif</span>
+          </div>
+          <p class="text-xs text-slate-400 mb-1">Key: <span class="text-sky-400">{{ d.key }}</span></p>
+          <p class="text-xs text-slate-400 mb-1">Family Code: <span class="text-lime-400">{{ d.get('family_code', '-') }}</span></p>
+          <p class="text-xs text-slate-400 mb-1">Variant Code: <span class="text-lime-400">{{ d.get('variant_code', '-') }}</span></p>
+          <p class="text-xs text-slate-400 mb-1">Option Code: <span class="text-lime-400">{{ d.get('option_code', '-') }}</span></p>
+          <p class="text-xs text-slate-400">Harga: <span class="font-mono">{{ "{:,}".format(d.get('price', 0)) }}</span></p>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-slate-400 text-sm">Tidak ada decoy yang cocok.</p>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
