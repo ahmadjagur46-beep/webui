@@ -23,7 +23,7 @@
       <input type="hidden" name="is_enterprise" value="{{ fam.get('is_enterprise', False) }}">
       <input type="hidden" name="variant_name" value="{{ var.name if var else '' }}">
       <input type="hidden" name="option_name" value="{{ opt.name }}">
-      <input type="hidden" name="order" value="{{ opt.get('order', 0) }}">
+      <input type="hidden" name="order" value="{{ opt.get('order') or 0 }}">
       <input type="hidden" name="package_option_code" value="{{ option_code }}">
       <button type="submit" class="btn btn-secondary" title="Bookmark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline-block mr-1"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg></button>
     </form>
